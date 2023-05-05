@@ -18,7 +18,7 @@
 #define PIN_MOSI 23 
 #define PIN_CS   8 
 #define PIN_SCK  22 
-#define LORA_DEFAULT_SPI_FREQUENCY 5E5 // 0.5Mhz instead 8Mhz -> 8E6
+#define LORA_DEFAULT_SPI_FREQUENCY 5E6 // 5MHz, max is 8Mhz -> 8E6
 /*
 #else
 #define PIN_MISO 16
@@ -108,6 +108,8 @@ public:
   void setSPIFrequency(uint32_t frequency);
 
   void dumpRegisters();
+  uint8_t readRegister(uint8_t address);
+  long getSignalBandwidth();
 
 private:
   void explicitHeaderMode();
@@ -117,11 +119,9 @@ private:
   bool isTransmitting();
 
   int getSpreadingFactor();
-  long getSignalBandwidth();
 
   void setLdoFlag();
 
-  uint8_t readRegister(uint8_t address);
   void writeRegister(uint8_t address, uint8_t value);
   uint8_t singleTransfer(uint8_t address, uint8_t value);
 
