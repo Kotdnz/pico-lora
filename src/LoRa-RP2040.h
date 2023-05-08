@@ -70,7 +70,6 @@ public:
   virtual int peek();
   virtual void flush();
 
-
   void onReceive(void(*callback)(int));
   void onTxDone(void(*callback)());
 
@@ -105,7 +104,7 @@ public:
 
   void setPins(int ss = LORA_DEFAULT_SS_PIN, int reset = LORA_DEFAULT_RESET_PIN, int dio0 = LORA_DEFAULT_DIO0_PIN);
   void setSPI(spi_inst_t& spi);
-  void setSPIFrequency(uint32_t frequency);
+  void setSPIFrequency(uint32_t frequency = LORA_DEFAULT_SPI_FREQUENCY);
 
   void dumpRegisters();
   uint8_t readRegister(uint8_t address);
@@ -130,6 +129,7 @@ private:
 private:
   // SPISettings _spiSettings;
   spi_inst_t* _spi;
+  uint32_t _SPIfrequency;
   int _ss;
   int _reset;
   int _dio0;

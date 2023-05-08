@@ -73,7 +73,8 @@ LoRaClass::LoRaClass() :
   _packetIndex(0),
   _implicitHeaderMode(0),
   _onReceive(NULL),
-  _onTxDone(NULL)
+  _onTxDone(NULL),
+  _SPIfrequency(LORA_DEFAULT_SPI_FREQUENCY)
 {}
 
 int LoRaClass::begin(long frequency)
@@ -96,9 +97,8 @@ int LoRaClass::begin(long frequency)
     sleep_ms(10);
   }
   
-
   // start SPI
-  spi_init(SPI_PORT, 12500);
+  spi_init(SPI_PORT, _SPIfrequency);
   gpio_set_function(PIN_MISO, GPIO_FUNC_SPI);
   gpio_set_function(PIN_SCK, GPIO_FUNC_SPI);
   gpio_set_function(PIN_MOSI, GPIO_FUNC_SPI);
@@ -114,6 +114,9 @@ int LoRaClass::begin(long frequency)
   // Make the CS pin available to picotool
   bi_decl(bi_1pin_with_name(PIN_CS, "SPI CS"));
   
+  gpio_init(_dio0);
+  gpio_set_dir(_dio0, GPIO_IN );
+
   // check version
   uint8_t version = readRegister(REG_VERSION);
   if (version != 0x12) {
@@ -643,6 +646,7 @@ void LoRaClass::setSPI(spi_inst_t& spi)
 
 void LoRaClass::setSPIFrequency(uint32_t frequency)
 {
+  _SPIfrequency = frequency;
   spi_set_baudrate(SPI_PORT, frequency);
 }
 
