@@ -92,9 +92,9 @@ int LoRaClass::begin(long frequency)
 
     // perform reset
     gpio_put(_reset, 0);
-    sleep_ms(10);
+    sleep_ms(1);
     gpio_put(_reset, 1);
-    sleep_ms(10);
+    sleep_ms(6);
   }
   
   // start SPI
@@ -680,7 +680,7 @@ void LoRaClass::handleDio0Rise()
   writeRegister(REG_IRQ_FLAGS, irqFlags);
 
   if ((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 0) {
-
+    
     if ((irqFlags & IRQ_RX_DONE_MASK) != 0) {
       // received a packet
       _packetIndex = 0;
@@ -694,7 +694,7 @@ void LoRaClass::handleDio0Rise()
       if (_onReceive) {
         _onReceive(packetLength);
       }
-    }
+    } 
     else if ((irqFlags & IRQ_TX_DONE_MASK) != 0) {
       if (_onTxDone) {
         _onTxDone();
